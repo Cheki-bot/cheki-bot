@@ -54,7 +54,7 @@ export default function Home() {
       <div className="w-1/2 flex gap-4">
         <InputComponent
           placeholder="Pregunta lo que quieras sobre el proceso electoral"
-          alt="Buscar"
+          type="largetext"
           value={state.query}
           onChange={(e) =>
             setState((prev) => ({ ...prev, query: e.target.value }))
