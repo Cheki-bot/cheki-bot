@@ -51,7 +51,7 @@ export default function Home() {
         </div>
       )}
 
-      <div className="w-1/2 flex gap-4">
+      <div className="w-1/2 flex gap-4 items-center ">
         <InputComponent
           placeholder="Pregunta lo que quieras sobre el proceso electoral"
           type="largetext"
