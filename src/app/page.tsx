@@ -97,7 +97,7 @@ export default function Home() {
 
                 <form
                     onSubmit={handleSend}
-                    className="w-full md:w-7xl flex gap-4 items-baseline-last border border-neutral-700 p-3 rounded-lg bg-neutral-900"
+                    className="w-full max-w-7xl flex gap-4 items-baseline-last border border-neutral-700 p-3 rounded-lg bg-neutral-900"
                 >
                     <InputComponent
                         placeholder="Pregunta lo que quieras"
