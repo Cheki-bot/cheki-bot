@@ -64,16 +64,16 @@ export default function Home() {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col h-screen p-2 md:p-0">
             <header className="flex px-6 py-4 h-fit flex-col w-full top-0 border-b-[1px] border-neutral-700 shadow-lime-300/10 bg-neutral-900 ">
                 <h1 className="text-xl font-semibold ">Cheki Bot</h1>
-                <p className="text-sm">
+                <p className="md:text-sm text-xs text-neutral-400">
                     Tu asistente de IA para todo lo relacionado con el proceso
                     electoral.
                 </p>
             </header>
 
-            <main className="flex flex-col flex-1 p-6 gap-4 overflow-hidden justify-centers items-center">
+            <main className="flex flex-col flex-1 p-0 md:p-6 gap-4 overflow-hidden justify-center items-center">
                 {state.messages.length > 0 ? (
                     <div className="w-full flex items-center justify-center flex-1 overflow-y-auto p-4 rounded-xl space-y-4 bg-neutral-900 scrollbar scrollbar-thumb-neutral-700 scrollbar-thumb-rounded-lg scrollbar-track-neutral-900">
                         <div className="w-7xl flex flex-col gap-4 ">
@@ -97,10 +97,10 @@ export default function Home() {
 
                 <form
                     onSubmit={handleSend}
-                    className="w-7xl flex gap-4 items-baseline-last border border-neutral-700 p-3 rounded-lg bg-neutral-900"
+                    className="w-full md:w-7xl flex gap-4 items-baseline-last border border-neutral-700 p-3 rounded-lg bg-neutral-900"
                 >
                     <InputComponent
-                        placeholder="Pregunta lo que quieras sobre el proceso electoral"
+                        placeholder="Pregunta lo que quieras"
                         type="largetext"
                         value={state.query}
                         onChange={(e) =>
