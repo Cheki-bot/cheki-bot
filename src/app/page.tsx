@@ -85,10 +85,10 @@ export default function Home() {
                     </div>
                 ) : (
                     <header className="flex flex-col items-center justify-between w-full max-w-5xl mb-8">
-                        <h1 className="text-4xl font-bold">
+                        <h1 className="text-2xl font-bold text-center md:text-4xl">
                             Bienvenido a Cheki Bot
                         </h1>
-                        <p className="mt-4">
+                        <p className="mt-4 text-center ">
                             Tu asistente de IA para todo lo relacionado con el
                             proceso electoral.
                         </p>
