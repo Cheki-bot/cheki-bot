@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ButtonComponent, InputComponent } from '@/components';
 import { MessageComponent } from '@/components/message-component/MessageComponent';
 
@@ -10,6 +10,7 @@ type Message = {
 };
 
 export default function Home() {
+    const bottomRef = useRef<HTMLDivElement>(null);
     const [state, setState] = useState({
         query: '',
         messages: [] as Message[],
@@ -22,6 +23,10 @@ export default function Home() {
         } else {
         }
     }, []);
+
+    useEffect(() => {
+        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
+    }, [state.messages]);
 
     useEffect(() => {
         localStorage.setItem('cheki_messages', JSON.stringify(state.messages));
@@ -75,6 +80,7 @@ export default function Home() {
                             {state.messages.map((msg, i) => (
                                 <MessageComponent key={i} msg={msg} />
                             ))}
+                            <div ref={bottomRef} />
                         </div>
                     </div>
                 ) : (
@@ -104,7 +110,9 @@ export default function Home() {
                             }))
                         }
                     />
-                    <ButtonComponent type="submit">Consultar</ButtonComponent>
+                    <ButtonComponent type="submit" disabled={!state.query}>
+                        Consultar
+                    </ButtonComponent>
                 </form>
             </main>
         </div>
