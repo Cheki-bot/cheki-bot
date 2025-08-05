@@ -20,7 +20,7 @@ export const MessageComponent = ({ msg, loading }: MessageComponentProps) => {
 
     return (
         <article
-            className={`bg-neutral-800 text-white p-3 rounded w-fit max-w-[70%] font-mono whitespace-pre-wrap 
+            className={`bg-neutral-800 text-white p-3 rounded w-fit max-w-full md:max-w-[70%] font-mono whitespace-pre-wrap break-words 
                     ${loading && 'min-w-[60px] min-h-[50px] flex justify-start'} 
                 ${msg.role === 'bot' ? 'text-left bg-transparent' : 'text-right ml-auto'}`}
         >
