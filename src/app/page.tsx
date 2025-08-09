@@ -71,12 +71,17 @@ export default function Home() {
             className="flex flex-col p-2 md:p-0"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
-            <header className="flex  px-6 py-4 h-fit flex-col w-full top-0 border-b-[1px] border-neutral-700 shadow-lime-300/10 bg-neutral-900 ">
-                <h1 className="text-xl font-semibold">Cheki Bot</h1>
-                <p className="md:text-sm text-xs text-neutral-400">
-                    Tu asistente de IA para todo lo relacionado con el proceso
-                    electoral.
-                </p>
+            <header className="flex md:px-6 md:py-4 px-4 py-2 h-fit justify-between items-center w-full top-0 border-b-[1px] border-neutral-700 shadow-lime-300/10 bg-neutral-900 ">
+                <span className="md:w-full w-2/3">
+                    <h1 className="text-xl font-semibold">Cheki Bot</h1>
+                    <p className="md:text-sm text-xs text-neutral-400">
+                        Tu asistente de IA para todo lo relacionado con el
+                        proceso electoral.
+                    </p>
+                </span>
+                <ButtonComponent styles="text-xs md:text-sm md:h-14 h-10">
+                    Nuevo Chat
+                </ButtonComponent>
             </header>
 
             <main className="flex flex-col flex-1 p-0 md:px-6 overflow-auto justify-center items-center mb-5">
