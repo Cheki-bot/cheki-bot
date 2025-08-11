@@ -1,131 +1,123 @@
 'use client';
-import { useState, useEffect, useRef } from 'react';
 
+import { useRef } from 'react';
 import { useViewportHeight } from '@/hooks/useViewPortHeight';
-
-import { MessageComponent } from '@/components/message-component/MessageComponent';
 import { ButtonComponent, InputComponent } from '@/components';
-
-type Message = {
-    role: 'user' | 'bot';
-    content: string;
-};
+import { MessageComponent } from '@/components/message-component/MessageComponent';
+import { Message, useChatWebSocket } from '@/hooks/useChatWebSocket';
 
 export default function Home() {
-    const bottomRef = useRef<HTMLDivElement>(null);
-    const [state, setState] = useState({
-        query: '',
-        messages: [] as Message[],
-    });
+    const bottomRef = useRef<HTMLDivElement>(
+        null
+    ) as React.RefObject<HTMLDivElement>;
+    const { messages, query, setQuery, handleSend, resetChat } =
+        useChatWebSocket(bottomRef);
+
     useViewportHeight();
-
-    useEffect(() => {
-        const saved = localStorage.getItem('cheki_messages');
-        if (saved) {
-            setState((prev) => ({ ...prev, messages: JSON.parse(saved) }));
-        } else {
-        }
-    }, []);
-
-    useEffect(() => {
-        bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
-    }, [state.messages]);
-
-    useEffect(() => {
-        localStorage.setItem('cheki_messages', JSON.stringify(state.messages));
-    }, [state.messages]);
-
-    const handleSend = (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const trimmed = state.query.trim();
-
-        if (trimmed) {
-            const userMsg: Message = { role: 'user', content: trimmed };
-
-            const responseMap: { [key: string]: string } = {
-                elecciones:
-                    'Las próximas elecciones serán el 2 de junio de 2024.',
-                registro: 'Puedes consultar tu registro en la página del INE.',
-                votar: 'Necesitas tu credencial de elector vigente para votar.',
-            };
-            const foundKey = Object.keys(responseMap).find((k) =>
-                trimmed.toLowerCase().includes(k)
-            );
-            const botMsg: Message = {
-                role: 'bot',
-                content: foundKey
-                    ? responseMap[foundKey]
-                    : 'Lo siento, no tengo información sobre eso aún.',
-            };
-            setState((prev) => ({
-                query: '',
-                messages: [...prev.messages, userMsg, botMsg],
-            }));
-        } else {
-            console.error('no enviado');
-        }
-    };
 
     return (
         <div
             className="flex flex-col p-2 md:p-0"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
-            <header className="flex md:px-6 md:py-4 px-4 py-2 h-fit justify-between items-center w-full top-0 border-b-[1px] border-neutral-700 shadow-lime-300/10 bg-neutral-900 ">
-                <span className="md:w-full w-2/3">
-                    <h1 className="text-xl font-semibold">Cheki Bot</h1>
-                    <p className="md:text-sm text-xs text-neutral-400">
-                        Tu asistente de IA para todo lo relacionado con el
-                        proceso electoral.
-                    </p>
-                </span>
-                <ButtonComponent styles="text-xs md:text-sm md:h-14 h-10">
-                    Nuevo Chat
-                </ButtonComponent>
-            </header>
+            <ChatHeader onNewChat={resetChat} />
 
             <main className="flex flex-col flex-1 p-0 md:px-6 overflow-auto justify-center items-center mb-5">
-                {state.messages.length > 0 ? (
-                    <div className="w-full h-fit md:mb-16 mb-7 flex justify-center flex-1 overflow-y-auto p-4 rounded-xl space-y-4 bg-neutral-900 scrollbar scrollbar-thumb-neutral-700 scrollbar-thumb-rounded-lg scrollbar-track-neutral-900">
-                        <div className="w-full h-fit md:w-7xl flex flex-col gap-4 ">
-                            {state.messages.map((msg, i) => (
-                                <MessageComponent key={i} msg={msg} />
-                            ))}
-                            <div ref={bottomRef} />
-                        </div>
-                    </div>
+                {messages.length > 0 ? (
+                    <ChatMessages messages={messages} bottomRef={bottomRef} />
                 ) : (
-                    <header className="flex flex-col items-center justify-between w-full max-w-5xl mb-8">
-                        <h1 className="text-2xl font-bold text-center md:text-4xl">
-                            Bienvenido a Cheki Bot
-                        </h1>
-                        <p className="mt-4 text-center ">
-                            Tu asistente de IA para todo lo relacionado con el
-                            proceso electoral.
-                        </p>
-                    </header>
+                    <WelcomeMessage />
                 )}
 
-                <form
-                    onSubmit={handleSend}
-                    className={`w-full ${state.messages.length > 0 ? 'fixed md:bottom-10 bottom-0 mb-2' : ''} max-w-7xl flex gap-4 items-baseline-last border border-neutral-700 p-3 rounded-lg bg-neutral-900`}
-                >
-                    <InputComponent
-                        placeholder="Pregunta lo que quieras"
-                        type="largetext"
-                        value={state.query}
-                        onChange={(e) =>
-                            setState((prev) => ({
-                                ...prev,
-                                query: e.target.value,
-                            }))
-                        }
-                    />
-                    <ButtonComponent type="submit" disabled={!state.query}>
-                        Consultar
-                    </ButtonComponent>
-                </form>
+                <ChatInput
+                    query={query}
+                    setQuery={setQuery}
+                    onSend={handleSend}
+                    hasMessages={messages.length > 0}
+                />
             </main>
         </div>
+    );
+}
+
+function ChatHeader({ onNewChat }: { onNewChat: () => void }) {
+    return (
+        <header className="flex md:px-6 md:py-4 px-4 py-2 h-fit justify-between items-center w-full top-0 border-b border-neutral-700 shadow-lime-300/10 bg-neutral-900 ">
+            <span className="md:w-full w-2/3">
+                <h1 className="text-xl font-semibold">Cheki Bot</h1>
+                <p className="md:text-sm text-xs text-neutral-400">
+                    Tu asistente de IA para todo lo relacionado con el proceso
+                    electoral.
+                </p>
+            </span>
+            <ButtonComponent
+                styles="text-xs md:text-sm md:h-14 h-10"
+                onPress={onNewChat}
+            >
+                Nuevo Chat
+            </ButtonComponent>
+        </header>
+    );
+}
+
+function ChatMessages({
+    messages,
+    bottomRef,
+}: {
+    messages: Message[];
+    bottomRef: React.RefObject<HTMLDivElement>;
+}) {
+    return (
+        <div className="w-full h-fit md:mb-16 mb-7 flex justify-center flex-1 overflow-y-auto p-4 rounded-xl space-y-4 bg-neutral-900 scrollbar scrollbar-thumb-neutral-700 scrollbar-thumb-rounded-lg scrollbar-track-neutral-900">
+            <div className="w-full h-fit md:w-7xl flex flex-col gap-4 ">
+                {messages.map((msg, i) => (
+                    <MessageComponent key={i} msg={msg} />
+                ))}
+                <div ref={bottomRef} />
+            </div>
+        </div>
+    );
+}
+
+function WelcomeMessage() {
+    return (
+        <header className="flex flex-col items-center justify-between w-full max-w-5xl mb-8">
+            <h1 className="text-2xl font-bold text-center md:text-4xl">
+                Bienvenido a Cheki Bot
+            </h1>
+            <p className="mt-4 text-center ">
+                Tu asistente de IA para todo lo relacionado con el proceso
+                electoral.
+            </p>
+        </header>
+    );
+}
+
+function ChatInput({
+    query,
+    setQuery,
+    onSend,
+    hasMessages,
+}: {
+    query: string;
+    setQuery: (val: string) => void;
+    onSend: (e: React.FormEvent) => void;
+    hasMessages: boolean;
+}) {
+    return (
+        <form
+            onSubmit={onSend}
+            className={`w-full ${hasMessages ? 'fixed md:bottom-10 bottom-0 mb-2' : ''} max-w-7xl flex gap-4 items-baseline-last border border-neutral-700 p-3 rounded-lg bg-neutral-900`}
+        >
+            <InputComponent
+                placeholder="Pregunta lo que quieras"
+                type="largetext"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+            />
+            <ButtonComponent type="submit" disabled={!query}>
+                Consultar
+            </ButtonComponent>
+        </form>
     );
 }
