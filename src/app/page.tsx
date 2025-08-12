@@ -1,5 +1,5 @@
 'use client';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 import {
     ButtonComponent,
@@ -7,8 +7,10 @@ import {
     MessageComponent,
 } from '@/components';
 import { type Message, useChatWebSocket, useViewportHeight } from '@/hooks';
+import { ModalComponent } from '@/components/shared/modal-component/ModalComponent';
 
 export default function Home() {
+    const [openModal, setOpenModal] = useState(false);
     const bottomRef = useRef<HTMLDivElement>(
         null
     ) as React.RefObject<HTMLDivElement>;
@@ -17,12 +19,33 @@ export default function Home() {
 
     useViewportHeight();
 
+    const handleNewChat = () => {
+        setOpenModal(true);
+    };
+
     return (
         <div
             className="flex flex-col p-2 md:p-0"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
-            <ChatHeader onNewChat={resetChat} />
+            {openModal && (
+                <ModalComponent
+                    isOpen={openModal}
+                    onClose={() => setOpenModal(false)}
+                    Accept={() => {
+                        setOpenModal(false);
+                        resetChat();
+                    }}
+                >
+                    <h2 className="text-lg font-semibold text-red-400">
+                        ¿Estás seguro de que quieres iniciar un nuevo chat?
+                    </h2>
+                    <p className="text-neutral-400 m-auto my-5">
+                        ¡Esto borrará el historial actual!
+                    </p>
+                </ModalComponent>
+            )}
+            <ChatHeader onNewChat={handleNewChat} />
 
             <main className="flex flex-col flex-1 p-0 md:px-6 overflow-auto justify-center items-center mb-5">
                 {messages.length > 0 ? (
