@@ -1,10 +1,12 @@
 'use client';
-
-import { ButtonComponent, InputComponent } from '@/components';
-import { MessageComponent } from '@/components/message-component/MessageComponent';
-import { Message, useChatWebSocket } from '@/hooks/useChatWebSocket';
-import { useViewportHeight } from '@/hooks/useViewPortHeight';
 import { useRef } from 'react';
+
+import {
+    ButtonComponent,
+    InputComponent,
+    MessageComponent,
+} from '@/components';
+import { type Message, useChatWebSocket, useViewportHeight } from '@/hooks';
 
 export default function Home() {
     const bottomRef = useRef<HTMLDivElement>(
