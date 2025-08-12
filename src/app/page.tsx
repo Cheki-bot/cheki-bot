@@ -25,7 +25,7 @@ export default function Home() {
 
     return (
         <div
-            className="flex flex-col p-2 md:p-0 bg-neutral-800 text-white"
+            className="flex flex-col p-2 md:p-0 bg-neutral-900 text-white"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
             {openModal && (
