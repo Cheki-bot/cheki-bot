@@ -27,7 +27,7 @@ export const MessageComponent = ({ msg, loading }: MessageComponentProps) => {
                     ${loading && 'min-w-[60px] min-h-[50px] flex justify-start'} 
                 ${msg.role === 'bot' ? 'text-left bg-transparent' : 'ml-auto'}`}
         >
-            {loading ? (
+            {loading && msg.role === 'bot' ? (
                 `${dots}`
             ) : msg.role === 'bot' ? (
                 <Markdown

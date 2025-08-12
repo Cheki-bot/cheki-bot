@@ -14,7 +14,7 @@ export default function Home() {
     const bottomRef = useRef<HTMLDivElement>(
         null
     ) as React.RefObject<HTMLDivElement>;
-    const { messages, query, setQuery, handleSend, resetChat } =
+    const { messages, query, setQuery, handleSend, resetChat, isGenerating } =
         useChatWebSocket(bottomRef);
 
     useViewportHeight();
@@ -49,7 +49,11 @@ export default function Home() {
 
             <main className="flex flex-col flex-1 p-0 md:px-6 overflow-auto justify-center items-center mb-5">
                 {messages.length > 0 ? (
-                    <ChatMessages messages={messages} bottomRef={bottomRef} />
+                    <ChatMessages
+                        messages={messages}
+                        bottomRef={bottomRef}
+                        isGenerating={isGenerating}
+                    />
                 ) : (
                     <WelcomeMessage />
                 )}
@@ -88,21 +92,31 @@ function ChatHeader({ onNewChat }: { onNewChat: () => void }) {
 function ChatMessages({
     messages,
     bottomRef,
+    isGenerating = false,
 }: {
     messages: Message[];
     bottomRef: React.RefObject<HTMLDivElement>;
+    isGenerating?: boolean;
 }) {
     return (
         <div className="w-full h-fit md:mb-16 mb-7 flex justify-center flex-1 overflow-y-auto p-4 rounded-xl space-y-4 bg-neutral-900 scrollbar scrollbar-thumb-neutral-700 scrollbar-thumb-rounded-lg scrollbar-track-neutral-900">
-            <div className=" h-fit md:max-w-7xl md:w-7xl flex flex-col gap-4 " style={{ width: '-webkit-fill-available' }}>
+            <div
+                className=" h-fit md:max-w-7xl md:w-7xl flex flex-col gap-4 "
+                style={{ width: '-webkit-fill-available' }}
+            >
                 {messages.map((msg, i) => (
-                    <MessageComponent key={i} msg={msg} />
+                    <MessageComponent
+                        key={i}
+                        msg={msg}
+                        loading={isGenerating && i === messages.length - 1}
+                    />
                 ))}
                 <div ref={bottomRef} />
             </div>
         </div>
     );
 }
+
 
 function WelcomeMessage() {
     return (
