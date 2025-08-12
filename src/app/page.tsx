@@ -1,10 +1,10 @@
 'use client';
 
-import { useRef } from 'react';
-import { useViewportHeight } from '@/hooks/useViewPortHeight';
 import { ButtonComponent, InputComponent } from '@/components';
 import { MessageComponent } from '@/components/message-component/MessageComponent';
 import { Message, useChatWebSocket } from '@/hooks/useChatWebSocket';
+import { useViewportHeight } from '@/hooks/useViewPortHeight';
+import { useRef } from 'react';
 
 export default function Home() {
     const bottomRef = useRef<HTMLDivElement>(
@@ -98,11 +98,13 @@ function ChatInput({
     setQuery,
     onSend,
     hasMessages,
+    end = false,
 }: {
     query: string;
     setQuery: (val: string) => void;
     onSend: (e: React.FormEvent) => void;
     hasMessages: boolean;
+    end?: boolean;
 }) {
     return (
         <form
@@ -115,7 +117,7 @@ function ChatInput({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
-            <ButtonComponent type="submit" disabled={!query}>
+            <ButtonComponent type="submit" disabled={end && !query}>
                 Consultar
             </ButtonComponent>
         </form>
