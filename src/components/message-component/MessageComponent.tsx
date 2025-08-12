@@ -1,3 +1,4 @@
+import { markdownComponents } from '@/lib/markdown/components';
 import { useEffect, useState } from 'react';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
@@ -27,7 +28,7 @@ export const MessageComponent = ({ msg, loading }: MessageComponentProps) => {
                     ${loading && 'min-w-[60px] min-h-[50px] flex justify-start'} 
                 ${msg.role === 'bot' ? 'text-left bg-transparent' : 'ml-auto'}`}
         >
-            {loading ? `${dots}` : <Markdown remarkPlugins={[remarkGfm]}>{msg.content}</Markdown>}
+            {loading ? `${dots}` : <Markdown remarkPlugins={[remarkGfm]} components={markdownComponents}>{msg.content}</Markdown>}
         </article>
     );
 };
