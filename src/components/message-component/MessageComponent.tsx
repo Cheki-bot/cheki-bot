@@ -37,7 +37,7 @@ export const MessageComponent = ({ msg, loading }: MessageComponentProps) => {
                     {msg.content}
                 </Markdown>
             ) : (
-                <span className="text-neutral-300">{msg.content}</span>
+                <span className="text-neutral-300 whitespace-pre-wrap">{msg.content}</span>
             )}
         </article>
     );

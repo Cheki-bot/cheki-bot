@@ -108,7 +108,7 @@ function ChatMessages({
                     <MessageComponent
                         key={i}
                         msg={msg}
-                        loading={isGenerating && i === messages.length - 1}
+                        // loading={isGenerating && i === messages.length - 1}
                     />
                 ))}
                 <div ref={bottomRef} />
