@@ -21,6 +21,7 @@ interface InputComponentProps {
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
     ) => void;
     border?: boolean;
+    limit?: number;
 }
 
 export const InputComponent = ({
@@ -30,6 +31,7 @@ export const InputComponent = ({
     onChange,
     type = 'text',
     border = false,
+    limit,
 }: InputComponentProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -58,6 +60,7 @@ export const InputComponent = ({
             value={value}
             onChange={onChange}
             name="largetext"
+            maxLength={limit}
             onKeyDown={(e) => {
                 if (e.key === 'Enter' && !e.shiftKey) {
                     e.preventDefault();
@@ -73,6 +76,7 @@ export const InputComponent = ({
             name="input"
             value={value}
             onChange={onChange}
+            maxLength={limit}
             className="border border-gray-300 p-2 rounded-md w-full"
         />
     );

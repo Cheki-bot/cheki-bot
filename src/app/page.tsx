@@ -25,7 +25,7 @@ export default function Home() {
 
     return (
         <div
-            className="flex flex-col p-2 md:p-0"
+            className="flex flex-col p-2 md:p-0 bg-neutral-800 text-white"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
             {openModal && (
@@ -94,7 +94,7 @@ function ChatMessages({
 }) {
     return (
         <div className="w-full h-fit md:mb-16 mb-7 flex justify-center flex-1 overflow-y-auto p-4 rounded-xl space-y-4 bg-neutral-900 scrollbar scrollbar-thumb-neutral-700 scrollbar-thumb-rounded-lg scrollbar-track-neutral-900">
-            <div className="w-full h-fit md:w-7xl flex flex-col gap-4 ">
+            <div className=" h-fit md:max-w-7xl md:w-7xl flex flex-col gap-4 " style={{ width: '-webkit-fill-available' }}>
                 {messages.map((msg, i) => (
                     <MessageComponent key={i} msg={msg} />
                 ))}
@@ -141,6 +141,7 @@ function ChatInput({
                 type="largetext"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
+                limit={500}
             />
             <ButtonComponent type="submit" disabled={end && !query}>
                 Consultar
