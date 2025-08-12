@@ -31,7 +31,7 @@ export const markdownComponents = {
         ) : (
             <code
                 {...props}
-                className="bg-neutral-900 text-green-400 px-2 py-1 rounded block text-sm"
+                className="bg-neutral-900 text-green-400 px-2 py-1 rounded block text-sm overflow-auto scrollbar scrollbar-thumb-neutral-700 scrollbar-thumb-rounded-lg scrollbar-track-neutral-900"
             />
         ),
     pre: (props: HTMLAttributes<HTMLPreElement>) => (
