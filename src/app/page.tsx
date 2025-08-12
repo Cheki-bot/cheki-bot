@@ -117,7 +117,7 @@ function ChatInput({
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
             />
-            <ButtonComponent type="submit" disabled={end}>
+            <ButtonComponent type="submit" disabled={end && !query}>
                 Consultar
             </ButtonComponent>
         </form>
