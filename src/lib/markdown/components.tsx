@@ -49,7 +49,7 @@ export const markdownComponents = {
     h3: (props: HTMLAttributes<HTMLHeadingElement>) => (
         <h3 {...props} className="text-lg font-semibold mb-2" />
     ),
-    p: (props: HTMLAttributes<HTMLParagraphElement>) => <p {...props} />,
+    p: (props: HTMLAttributes<HTMLParagraphElement>) => <p {...props} className="mb-2 text-neutral-300" />,
     blockquote: (props: HTMLAttributes<HTMLElement>) => (
         <blockquote
             {...props}
@@ -64,5 +64,8 @@ export const markdownComponents = {
     ),
     li: (props: HTMLAttributes<HTMLLIElement>) => (
         <li {...props} className="mb-1" />
+    ),
+    hr: (props: HTMLAttributes<HTMLHRElement>) => (
+        <hr {...props} className="border-t border-neutral-700  my-4" />
     ),
 };
