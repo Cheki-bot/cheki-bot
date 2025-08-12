@@ -11,11 +11,26 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
 
   useEffect(() => {
     const saved = localStorage.getItem('cheki_messages');
-    if (saved) setMessages(JSON.parse(saved));
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.length > 200) {
+        const last200 = parsed.slice(-200);
+        setMessages(last200);
+        localStorage.setItem('cheki_messages', JSON.stringify(last200));
+      } else {
+        setMessages(parsed);
+      }
+    }
   }, []);
 
   useEffect(() => {
-    localStorage.setItem('cheki_messages', JSON.stringify(messages));
+    if (messages.length > 200) {
+      const last200 = messages.slice(-200);
+      setMessages(last200);
+      localStorage.setItem('cheki_messages', JSON.stringify(last200));
+    } else {
+      localStorage.setItem('cheki_messages', JSON.stringify(messages));
+    }
   }, [messages]);
 
   useEffect(() => {
@@ -37,7 +52,6 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
 
       ws.onopen = () => {
         const last50Messages = updatedMessages.slice(-50);
-        console.log('Enviando mensaje:', last50Messages);
         const formattedHistory = last50Messages.map((msg) => ({
           role: msg.role === 'bot' ? 'assistant' : 'user',
           content: msg.content,
