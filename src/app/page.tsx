@@ -71,7 +71,7 @@ function ChatMessages({
 }) {
     return (
         <div className="w-full h-fit md:mb-16 mb-7 flex justify-center flex-1 overflow-y-auto p-4 rounded-xl space-y-4 bg-neutral-900 scrollbar scrollbar-thumb-neutral-700 scrollbar-thumb-rounded-lg scrollbar-track-neutral-900">
-            <div className=" h-fit md:w-7xl flex flex-col gap-4 " style={{ width: '-webkit-fill-available' }}>
+            <div className=" h-fit md:max-w-7xl md:w-7xl flex flex-col gap-4 " style={{ width: '-webkit-fill-available' }}>
                 {messages.map((msg, i) => (
                     <MessageComponent key={i} msg={msg} />
                 ))}
