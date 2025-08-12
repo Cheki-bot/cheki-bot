@@ -36,7 +36,9 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
       const ws = new WebSocket(`${process.env.NEXT_PUBLIC_API_URL}/chatbot/ws`);
 
       ws.onopen = () => {
-        const formattedHistory = updatedMessages.map((msg) => ({
+        const last50Messages = updatedMessages.slice(-50);
+        console.log('Enviando mensaje:', last50Messages);
+        const formattedHistory = last50Messages.map((msg) => ({
           role: msg.role === 'bot' ? 'assistant' : 'user',
           content: msg.content,
         }));
