@@ -1,5 +1,5 @@
 'use client';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import {
     ButtonComponent,
@@ -8,16 +8,25 @@ import {
 } from '@/components';
 import { type Message, useChatWebSocket, useViewportHeight } from '@/hooks';
 import { ModalComponent } from '@/components/shared/modal-component/ModalComponent';
+import { ChequeaBoliviaLogo } from '@/assets/logos/chequea-bolivia_logo';
+import Image from 'next/image';
+import { Questions } from '@/lib/models/frequently-questions';
 
 export default function Home() {
     const [openModal, setOpenModal] = useState(false);
+    const [randomQuestions, setRandomQuestions] = useState<string[]>([]);
     const bottomRef = useRef<HTMLDivElement>(
         null
     ) as React.RefObject<HTMLDivElement>;
-    const { messages, query, setQuery, handleSend, resetChat, isGenerating } =
+    const { messages, query, setQuery, sendMessage, resetChat, isGenerating } =
         useChatWebSocket(bottomRef);
-
     useViewportHeight();
+
+    useEffect(() => {
+        setRandomQuestions(
+            Questions.sort(() => 0.5 - Math.random()).slice(0, 5)
+        );
+    }, []);
 
     const handleNewChat = () => {
         setOpenModal(true);
@@ -25,7 +34,7 @@ export default function Home() {
 
     return (
         <div
-            className="flex flex-col p-2 md:p-0 bg-neutral-900 text-white"
+        className="flex flex-col p-2 md:p-0 bg-neutral-900 text-white"
             style={{ height: 'calc(var(--vh, 1vh) * 100)' }}
         >
             {openModal && (
@@ -55,13 +64,36 @@ export default function Home() {
                         isGenerating={isGenerating}
                     />
                 ) : (
-                    <WelcomeMessage />
+                    <>
+                        <WelcomeMessage />
+                        <div className="flex flex-wrap gap-2 justify-center mb-5 max-w-7xl">
+                            {randomQuestions.map((question, index) => (
+                                <span
+                                    key={index}
+                                    className="flex items-center text-center sm:w-fit w-80 gap-2 bg-pink-300/10 rounded py-1 px-2 max-w-xs cursor-pointer"
+                                >
+                                    <p
+                                        className="text-neutral-300 line-clamp-2 overflow-hidden"
+                                        onClick={() => {
+                                            setQuery(question);
+                                            sendMessage(question);
+                                        }}
+                                    >
+                                        {question}
+                                    </p>
+                                </span>
+                            ))}
+                        </div>
+                    </>
                 )}
 
                 <ChatInput
                     query={query}
                     setQuery={setQuery}
-                    onSend={handleSend}
+                    onSend={(e) => {
+                        e.preventDefault();
+                        sendMessage(query);
+                    }}
                     hasMessages={messages.length > 0}
                 />
             </main>
@@ -117,17 +149,31 @@ function ChatMessages({
     );
 }
 
-
 function WelcomeMessage() {
     return (
         <header className="flex flex-col items-center justify-between w-full max-w-5xl mb-8">
-            <h1 className="text-2xl font-bold text-center md:text-4xl">
+            <Image
+                width={200}
+                height={200}
+                src="/logo_chatbot_notext.png"
+                alt="Logo chatbot Chekibot"
+            />
+            <h1 className="text-2xl font-bold text-center md:text-4xl text-[#68BEB4]">
                 Bienvenido a Cheki Bot
             </h1>
-            <p className="mt-4 text-center ">
-                Tu asistente de IA para todo lo relacionado con el proceso
-                electoral.
-            </p>
+            <div className="flex mt-4 items-center justify-center w-full h-full gap-2">
+                <p className="text-center flex flex-col md:flex-row items-center gap-2 text-neutral-300">
+                    Tu asistente de IA para todo lo relacionado con el proceso
+                    electoral creado por
+                    <span className='flex items-center'>
+                        <ChequeaBoliviaLogo className="w-7 h-7 aspect-square" />
+                        <strong className="text-xl">
+                            <span className="text-white">Chequea</span>{' '}
+                            <span className="text-[#68BEB4]">Bolivia</span>
+                        </strong>
+                    </span>
+                </p>
+            </div>
         </header>
     );
 }
@@ -148,7 +194,7 @@ function ChatInput({
     return (
         <form
             onSubmit={onSend}
-            className={`w-full ${hasMessages ? 'fixed md:bottom-10 bottom-0 mb-2' : ''} max-w-7xl flex gap-4 items-baseline-last border border-neutral-700 p-3 rounded-lg bg-neutral-900`}
+            className={`w-full ${hasMessages ? 'fixed md:bottom-10 bottom-0 mb-2' : ''} max-w-7xl flex gap-4 items-baseline-last border  p-3 rounded-lg bg-neutral-900`}
         >
             <InputComponent
                 placeholder="Pregunta lo que quieras"

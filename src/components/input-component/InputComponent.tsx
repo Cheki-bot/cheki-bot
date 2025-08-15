@@ -54,7 +54,7 @@ export const InputComponent = ({
             ref={textareaRef}
             placeholder={placeholder}
             aria-label={ariaLabel}
-            className={`max-h-40 ${border && 'border border-neutral-700'} focus:outline-none focus:border-0 px-2 py-1.5 rounded-md w-full resize-none overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-900`}
+            className={`max-h-40 ${border && 'border border-pink-500'} focus:outline-none focus:border-0 px-2 py-1.5 rounded-md w-full resize-none overflow-y-auto scrollbar-thin scrollbar-thumb-neutral-700 scrollbar-track-neutral-900`}
             rows={1}
             onInput={handleInput}
             value={value}
@@ -77,7 +77,7 @@ export const InputComponent = ({
             value={value}
             onChange={onChange}
             maxLength={limit}
-            className="border border-gray-300 p-2 rounded-md w-full"
+            className="border border-pink-500 p-2 rounded-md w-full"
         />
     );
 };
