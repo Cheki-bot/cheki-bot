@@ -40,7 +40,7 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
 
     const sendMessage = useCallback(
         (message?: string) => {
-            const content = message ?? query;
+            const content = message ?? query.trim();
             if (!content.trim() || isGenerating) return;
 
             const userMsg: Message = { role: 'user', content };
