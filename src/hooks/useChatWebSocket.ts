@@ -38,13 +38,12 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
         bottomRef.current?.scrollIntoView({ behavior: 'smooth' });
     }, [messages, bottomRef]);
 
-    const handleSend = useCallback(
-        (e: React.FormEvent) => {
-            e.preventDefault();
-            const trimmed = query.trim();
-            if (!trimmed || isGenerating) return;
+    const sendMessage = useCallback(
+        (message?: string) => {
+            const content = message ?? query.trim();
+            if (!content.trim() || isGenerating) return;
 
-            const userMsg: Message = { role: 'user', content: trimmed };
+            const userMsg: Message = { role: 'user', content };
             const updatedMessages = [...messages, userMsg];
             setMessages(updatedMessages);
             setQuery('');
@@ -63,7 +62,7 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
 
                 ws.send(
                     JSON.stringify({
-                        content: trimmed,
+                        content,
                         history: formattedHistory,
                     })
                 );
@@ -95,7 +94,7 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
                 console.error('Error WebSocket', err);
             };
         },
-        [query, messages, isGenerating]
+        [messages, query, isGenerating]
     );
 
     const resetChat = useCallback(() => {
@@ -104,5 +103,5 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
         localStorage.removeItem('cheki_messages');
     }, []);
 
-    return { query, setQuery, messages, handleSend, resetChat, isGenerating };
+    return { query, setQuery, messages, sendMessage, resetChat, isGenerating };
 }

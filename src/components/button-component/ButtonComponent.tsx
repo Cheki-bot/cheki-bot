@@ -23,7 +23,7 @@ export const ButtonComponent = ({
                               'linear-gradient(135deg, rgb(0, 207, 175), rgb(5, 150, 105))',
                       }
             }
-            className={`py-2 px-4 rounded-[10px] ${disabled ? 'cursor-not-allowed bg-neutral-500' : 'cursor-pointer hover:bg-neutral-800 text-white'} ${styles}`}
+            className={`text-pink-400 py-2 px-4 rounded-[10px] ${disabled ? 'cursor-not-allowed bg-neutral-500' : 'cursor-pointer hover:bg-neutral-800 text-white'} ${styles}`}
             type={type}
             aria-label="Enviar consulta"
             onClick={onPress}
