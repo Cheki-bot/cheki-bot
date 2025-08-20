@@ -168,11 +168,7 @@ function WelcomeMessage() {
                 alt="Logo chatbot Chekibot"
             />
             <h1 className="text-2xl font-bold text-center md:text-4xl text-[#68BEB4]">
-<<<<<<< HEAD
                 Bienvenido a Checki Bot
-=======
-                Bienvenido a ChekiBot
->>>>>>> 6acabdee1c2341884f11cac7c674a5084d51a949
             </h1>
             <div className="flex mt-4 items-center justify-center w-full h-full gap-2">
                 <p className="text-center flex flex-col md:flex-row items-center gap-2 text-neutral-300">
