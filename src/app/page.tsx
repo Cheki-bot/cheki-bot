@@ -56,7 +56,7 @@ export default function Home() {
             )}
             <ChatHeader onNewChat={handleNewChat} />
 
-            <main className="flex flex-col flex-1 p-0 md:px-6 overflow-auto justify-center items-center mb-5">
+            <main className="flex relative flex-col flex-1 p-0 md:px-6 overflow-auto justify-center items-center">
                 {messages.length > 0 ? (
                     <ChatMessages
                         messages={messages}
@@ -70,10 +70,10 @@ export default function Home() {
                             {randomQuestions.map((question, index) => (
                                 <span
                                     key={index}
-                                    className="flex items-center text-center sm:w-fit w-80 gap-2 bg-pink-300/10 rounded py-1 px-2 max-w-xs cursor-pointer"
+                                    className="flex items-center text-center sm:text-lg text-sm sm:w-fit w-72 gap-2 bg-pink-300/10 rounded py-1 px-2 max-w-xs cursor-pointer"
                                 >
                                     <p
-                                        className="text-neutral-300 line-clamp-2 overflow-hidden"
+                                        className="text-neutral-300 text-center w-full line-clamp-2 overflow-hidden"
                                         onClick={() => {
                                             setQuery(question);
                                             sendMessage(question);
@@ -97,6 +97,15 @@ export default function Home() {
                     hasMessages={messages.length > 0}
                 />
             </main>
+            <footer>
+                <p className="text-xs text-[10px] text-center text-neutral-400 sm:mb-7 mb-0">
+                    La información fue generada con IA y puede contener errores.
+                    Verifícala antes de usarla.
+                </p>
+                <p className="sm:text-xs text-[10px] md:absolute relative md:text-left w-full md:w-fit text-center text-neutral-400 md:p-1 bottom-0">
+                    En colaboración con HackLab y SCESI
+                </p>
+            </footer>
         </div>
     );
 }
@@ -159,7 +168,11 @@ function WelcomeMessage() {
                 alt="Logo chatbot Chekibot"
             />
             <h1 className="text-2xl font-bold text-center md:text-4xl text-[#68BEB4]">
+<<<<<<< HEAD
                 Bienvenido a Checki Bot
+=======
+                Bienvenido a ChekiBot
+>>>>>>> 6acabdee1c2341884f11cac7c674a5084d51a949
             </h1>
             <div className="flex mt-4 items-center justify-center w-full h-full gap-2">
                 <p className="text-center flex flex-col md:flex-row items-center gap-2 text-neutral-300">
@@ -168,7 +181,7 @@ function WelcomeMessage() {
                     <span className="flex items-center">
                         <ChequeaBoliviaLogo className="w-7 h-7 aspect-square" />
                         <strong className="text-xl">
-                            <span className="text-white">Chequea</span>{' '}
+                            <span className="text-white">Chequea</span>
                             <span className="text-[#68BEB4]">Bolivia</span>
                         </strong>
                     </span>
@@ -194,7 +207,7 @@ function ChatInput({
     return (
         <form
             onSubmit={onSend}
-            className={`w-full ${hasMessages ? 'fixed md:bottom-10 bottom-0 mb-2' : ''} max-w-7xl flex gap-4 items-baseline-last border  p-3 rounded-lg bg-neutral-900`}
+            className={`w-full mx-8 ${hasMessages ? 'fixed md:bottom-10 bottom-8 mb-2' : ''} max-w-7xl flex gap-4 items-baseline-last border  p-3 rounded-lg bg-neutral-900`}
         >
             <InputComponent
                 placeholder="Pregunta lo que quieras"
