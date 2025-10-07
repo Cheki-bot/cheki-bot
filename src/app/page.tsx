@@ -56,7 +56,7 @@ export default function Home() {
             )}
             <ChatHeader onNewChat={handleNewChat} />
 
-            <main className="flex relative flex-col flex-1 p-0 md:px-6 overflow-auto justify-center items-center">
+            <main className="flex relative flex-col flex-1 p-0 md:px-6 overflow-y-auto justify-center items-center">
                 {messages.length > 0 ? (
                     <ChatMessages
                         messages={messages}
