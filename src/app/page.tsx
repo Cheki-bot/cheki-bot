@@ -114,7 +114,7 @@ function ChatHeader({ onNewChat }: { onNewChat: () => void }) {
     return (
         <header className="flex md:px-6 md:py-4 px-4 py-2 h-fit justify-between items-center w-full top-0 border-b border-neutral-700 shadow-lime-300/10 bg-neutral-900 ">
             <span className="md:w-full w-2/3">
-                <h1 className="text-xl font-semibold">Cheki Bot</h1>
+                <h1 className="text-xl font-semibold">Checki Bot</h1>
                 <p className="md:text-sm text-xs text-neutral-400">
                     Tu asistente de IA para todo lo relacionado con el proceso
                     electoral.
@@ -168,7 +168,7 @@ function WelcomeMessage() {
                 alt="Logo chatbot Chekibot"
             />
             <h1 className="text-2xl font-bold text-center md:text-4xl text-[#68BEB4]">
-                Bienvenido a ChekiBot
+                Bienvenido a CheckiBot
             </h1>
             <div className="flex mt-4 items-center justify-center w-full h-full gap-2">
                 <p className="text-center flex flex-col md:flex-row items-center gap-2 text-neutral-300">
