@@ -26,19 +26,20 @@ export default function RootLayout({
             <body className={`${baloo2.variable} antialiased`}>
                 {GA_ID && (
                     <>
-                        <Script
+                       <Script
                             src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
                             strategy="afterInteractive"
                         />
+                        {/* Inicializa la configuración */}
                         <Script id="gtag-init" strategy="afterInteractive">
                             {`
-                            window.dataLayer = window.dataLayer || [];
-                            function gtag(){dataLayer.push(arguments);}
-                            gtag('js', new Date());
-                            gtag('config', '${GA_ID}', {
-                                page_path: window.location.pathname,
-                            });
-                        `}
+                                window.dataLayer = window.dataLayer || [];
+                                function gtag(){dataLayer.push(arguments);}
+                                gtag('js', new Date());
+                                gtag('config', '${GA_ID}', {
+                                    page_path: window.location.pathname,
+                                });
+                            `}
                         </Script>
                     </>
                 )}
@@ -47,3 +48,4 @@ export default function RootLayout({
         </html>
     );
 }
+
