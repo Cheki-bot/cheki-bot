@@ -3,6 +3,7 @@ import { useState, useEffect, useCallback } from 'react';
 export type Message = {
     role: 'user' | 'bot';
     content: string;
+    type?: 'text' | 'error' | 'info';
 };
 
 export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
@@ -14,24 +15,15 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
         const saved = localStorage.getItem('cheki_messages');
         if (saved) {
             const parsed = JSON.parse(saved);
-            if (parsed.length > 200) {
-                const last200 = parsed.slice(-200);
-                setMessages(last200);
-                localStorage.setItem('cheki_messages', JSON.stringify(last200));
-            } else {
-                setMessages(parsed);
-            }
+            const trimmed = parsed.length > 200 ? parsed.slice(-200) : parsed;
+            setMessages(trimmed);
+            localStorage.setItem('cheki_messages', JSON.stringify(trimmed));
         }
     }, []);
 
     useEffect(() => {
-        if (messages.length > 200) {
-            const last200 = messages.slice(-200);
-            setMessages(last200);
-            localStorage.setItem('cheki_messages', JSON.stringify(last200));
-        } else {
-            localStorage.setItem('cheki_messages', JSON.stringify(messages));
-        }
+        const trimmed = messages.length > 200 ? messages.slice(-200) : messages;
+        localStorage.setItem('cheki_messages', JSON.stringify(trimmed));
     }, [messages]);
 
     useEffect(() => {
@@ -40,8 +32,8 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
 
     const sendMessage = useCallback(
         (message?: string) => {
-            const content = message ?? query.trim();
-            if (!content.trim() || isGenerating) return;
+            const content = message ?? query.trim().replace(/\s+/g, ' ').trim();
+            if (!content || isGenerating) return;
 
             const userMsg: Message = { role: 'user', content };
             const updatedMessages = [...messages, userMsg];
@@ -69,29 +61,70 @@ export function useChatWebSocket(bottomRef: React.RefObject<HTMLDivElement>) {
             };
 
             ws.onmessage = (event) => {
-                const chunk = event.data;
-                setMessages((prev) => {
-                    const lastMsg = prev[prev.length - 1];
-                    if (lastMsg?.role === 'bot') {
-                        const msgs = [...prev];
-                        msgs[msgs.length - 1] = {
-                            ...lastMsg,
-                            content: lastMsg.content + chunk,
-                        };
-                        return msgs;
-                    }
-                    return [...prev, { role: 'bot', content: chunk }];
-                });
+                try {
+                    const data = JSON.parse(event.data);
+                    const { content, type, done } = data;
+
+                    if (!content) return;
+
+                    setMessages((prev) => {
+                        let msgs = [...prev];
+
+                        if (type === 'info') {
+                            msgs = msgs.filter(
+                                (m) => !(m.role === 'bot' && m.type === 'info')
+                            );
+                            return [
+                                ...msgs,
+                                { role: 'bot', content: content, type },
+                            ];
+                        } else {
+                            msgs = msgs.filter(
+                                (m) => !(m.role === 'bot' && m.type === 'info')
+                            );
+
+                            const lastMsg = msgs[msgs.length - 1];
+
+                            if (
+                                lastMsg?.role === 'bot' &&
+                                lastMsg.type === type
+                            ) {
+                                msgs[msgs.length - 1] = {
+                                    ...lastMsg,
+                                    content:
+                                        lastMsg.content + content,
+                                };
+                                return msgs;
+                            }
+
+                            return [
+                                ...msgs,
+                                { role: 'bot', content: content, type },
+                            ];
+                        }
+                    });
+
+                    if (done) ws.close();
+                } catch (err) {
+                    console.error('Error parsing message:', err);
+                }
             };
 
             ws.onclose = () => {
                 setIsGenerating(false);
-                console.log('Conexión cerrada');
             };
 
             ws.onerror = (err) => {
                 setIsGenerating(false);
                 console.error('Error WebSocket', err);
+                setMessages((prev) => [
+                    ...prev,
+                    {
+                        role: 'bot',
+                        content: 'Error de conexión con el servidor.',
+                        type: 'error',
+                    },
+                ]);
             };
         },
         [messages, query, isGenerating]
