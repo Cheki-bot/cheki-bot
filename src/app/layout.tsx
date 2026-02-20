@@ -27,6 +27,7 @@ export default function RootLayout({
                 {children}
                 {/* Global Site Tag (gtag.js) - Google Analytics */}
                 <Script
+                    id="ga-setup"
                     src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
                     strategy="afterInteractive"
                 />
